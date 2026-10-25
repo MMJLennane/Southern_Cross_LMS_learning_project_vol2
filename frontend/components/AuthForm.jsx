@@ -32,4 +32,14 @@ export default function AuthForm({ onAuthenticated }) {
             setItSubmitting(false);
         }
     }
+
+    return (
+        <main className="auth=layout">
+            <section className="auth-copy">
+                <span className="eyebrow">Southern Cross Learning</span>
+                <h1>Learning on your terms, in your own time.</h1>
+                <p>Taking the learning with you in life, taylored to your lifestyle, letting you become the next version of you.</p>
+            </section>
+        </main>
+    )
 }
