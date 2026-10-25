@@ -39,6 +39,10 @@ export default function AuthForm({ onAuthenticated }) {
                 <span className="eyebrow">Southern Cross Learning</span>
                 <h1>Learning on your terms, in your own time.</h1>
                 <p>Taking the learning with you in life, taylored to your lifestyle, letting you become the next version of you.</p>
+                <div className="auth-note>"
+                    <span className="note-mark" aria-hidden="true">*</span>
+                    <span>Taking small steps will lead to a bigger life. Start with one course.</span>
+                </div>
             </section>
         </main>
     )
