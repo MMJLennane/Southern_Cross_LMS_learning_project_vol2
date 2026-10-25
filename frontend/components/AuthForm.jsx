@@ -44,6 +44,53 @@ export default function AuthForm({ onAuthenticated }) {
                     <span>Taking small steps will lead to a bigger life. Start with one course.</span>
                 </div>
             </section>
-        </main>
-    )
+            <section className="auth-card" aria-labelledby="auth-title">
+        <div className="brand-mark" aria-hidden="true">N</div>
+        <p className="eyebrow">YOUR LEARNING SPACE</p>
+        <h2 id="auth-title">{isRegistering ? "Create your account" : "Welcome back"}</h2>
+        <p className="muted">
+          {isRegistering ? "Join the community and find your next course." : "Sign in to continue learning."}
+        </p>
+        <form onSubmit={handleSubmit} className="stack">
+          <label>
+            Username
+            <input name="username" autoComplete="username" required />
+          </label>
+          {isRegistering && (
+            <label>
+              Email <span className="optional">(optional)</span>
+              <input name="email" type="email" autoComplete="email" />
+            </label>
+          )}
+          <label>
+            Password
+            <input
+              name="password"
+              type="password"
+              autoComplete={isRegistering ? "new-password" : "current-password"}
+              minLength={isRegistering ? 8 : undefined}
+              required
+            />
+          </label>
+          {error && <p className="form-error" role="alert">{error}</p>}
+          <button className="button button-primary full-width" disabled={isSubmitting}>
+            {isSubmitting ? "Please wait…" : isRegistering ? "Create account" : "Sign in"}
+          </button>
+        </form>
+        <p className="switch-auth">
+          {isRegistering ? "Already have an account?" : "New to Northstar?"}{" "}
+          <button
+            className="text-button"
+            type="button"
+            onClick={() => {
+              setError("");
+              setIsRegistering(!isRegistering);
+            }}
+          >
+            {isRegistering ? "Sign in" : "Create an account"}
+          </button>
+        </p>
+      </section>
+    </main>
+  );
 }
