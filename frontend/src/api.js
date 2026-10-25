@@ -19,3 +19,24 @@ async function request(path, { token, ...options } = {}) {
 
     return response.status === 204 ? null : response.json();
 }
+
+// These operations match Django URL routes; authentication calls pass the access token here.
+export const api = {
+    listCourses: () => request("/courses/"),
+    register: (details) => 
+        request("/auth/register/", { method: "POST", body: JSON.stringify(details) }),
+    login: (credentials) =>
+        request("/auth/token/", { method: "POST", body: JSON.stringify(credentials) }),
+    currentUser: (token) => request("/auth/me/", { token }),
+    listEnrollments: (token) => request("/enrollments/", { token }),
+    enroll: (courseId, token) =>
+        request(`/courses/${courseId}/enroll/`, { method: "POST", token }),
+    unenroll: (courseId, token) =>
+        request(`/courses/${courseId}/unenroll/`, { method: "DELETE", token }),
+    createCourse: (details, token) =>
+        request("/courses/", { method: "POST", body: JSON.stringify(details), token }),
+    updateCourse: (courseId, details, token) =>
+        request(`/courses/${courseId}/`, { method: "PATCH", body: JSON.stringify(details), token }),
+    deleteCourse: (courseId, token) =>
+        request(`/courses/${courseId}/`, { method: "DELETE", token }),
+};
