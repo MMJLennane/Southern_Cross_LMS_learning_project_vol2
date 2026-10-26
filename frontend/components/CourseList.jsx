@@ -1,7 +1,7 @@
-function CourseCard({ course, isEnrolled, canEnroll, onEnroll, onUmenroll }) {
+function CourseCard({ course, isEnrolled, canEnroll, onEnroll, onUnenroll }) {
     return (
         <article className="course-card">
-            <div>
+            <div className="course-art" aria-hidden="true">
                 <span>{course.title.slice(0,1).toUpperCase()}</span>
             </div>
             <div className="course-content">
@@ -13,9 +13,16 @@ function CourseCard({ course, isEnrolled, canEnroll, onEnroll, onUmenroll }) {
                 <p>{course.description}</p>
                 <div className="course-footer">
                     <span className="teacher-name">with {course.teacher_name}</span>
-                    
+                    {canEnroll && (
+                        <button
+                            className={`button ${isEnrolled ? "button-quiet" :"button-outline"}`}
+                            onClick={() => (isEnrolled ? onUnenroll(course.id) : onEnroll(course.id))}
+                        >
+                                {isEnrolled ? "Leave course" : "Explore course"}
+                        </button>
+                    )}
                 </div>
             </div>
         </article>
-    )
+    );
 }
