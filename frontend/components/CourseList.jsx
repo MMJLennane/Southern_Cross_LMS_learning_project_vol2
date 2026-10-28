@@ -39,5 +39,18 @@ export default function CourseList({
     if (courses.length === 0) {
         return <p className="empty-state">No courses are here just yet.  Check back soon for a new place to start.</p>
     }
-    
+    return (
+        <div className="course-grid">
+            {courses.map((course) => (
+                <CourseCard
+                    key={course.id}
+                    course={course}
+                    isEnrolled={enrolledIds.has(course.id)}
+                    canEnroll={canEnroll}
+                    onEnroll={onEnroll}
+                    onUnenroll={onUnenroll}
+                />    
+            ))}
+        </div>
+    );
 }
