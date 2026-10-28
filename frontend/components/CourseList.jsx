@@ -26,3 +26,18 @@ function CourseCard({ course, isEnrolled, canEnroll, onEnroll, onUnenroll }) {
         </article>
     );
 }
+
+export default function CourseList({
+    courses,
+    enrolledIds,
+    canEnroll,
+    onEnroll,
+    onUnenroll,
+    isLoading,
+}) {
+    if (isLoading) return <P className="empty-state">Loading courses...</P>;
+    if (courses.length === 0) {
+        return <p className="empty-state">No courses are here just yet.  Check back soon for a new place to start.</p>
+    }
+    
+}
