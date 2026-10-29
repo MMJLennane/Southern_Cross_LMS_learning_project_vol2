@@ -30,6 +30,15 @@ export default function StudentDashboard({
                 <div className="stat-card"><span className="stat-icon peach" aria-hidden="true">✳</span><span className="stat-label">YOUR ROLE</span><strong className="role-stat">Student</strong><span className="stat-foot">Your workspace is ready</span></div>
                 <div className="stat-card stat-card-feature"><span className="stat-label">A NOTE TO SELF</span><strong>Curiosity looks<br />good on you.</strong><span className="stat-foot">Keep showing up.</span><span className="feature-sun" aria-hidden="true">✳</span></div>
             </div>
+            <div className="section-heading"> // this creates a heading area on the dashboard for course recommendations.  and adds a button to view all courses.
+                <div>
+                    <div>
+                    <p className="eyebrow">A place to begin</p>
+                    <h2>Picked for your next step</h2>
+                    </div>
+                    <button className="text-button" onCLick={onViewCourses}>View all courses<span aria-hidden="true">→</span></button>
+                </div>
+            </div>
         </>
     )
 }
