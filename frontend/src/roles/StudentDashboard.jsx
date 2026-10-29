@@ -39,6 +39,14 @@ export default function StudentDashboard({
                     <button className="text-button" onCLick={onViewCourses}>View all courses<span aria-hidden="true">→</span></button>
                 </div>
             </div>
+            <CourseList // this renders a curated course list, it limits the list to the first three courses and keeps the dashboard focused.
+                courses={courses.slice(0, 3)}
+                enrolledIds={enrolledIds}
+                canEnroll
+                onEnroll={onEnroll}
+                onUnenroll={onUnenroll}
+                isLoading={isLoading}
+            />
         </>
-    )
+    );
 }
