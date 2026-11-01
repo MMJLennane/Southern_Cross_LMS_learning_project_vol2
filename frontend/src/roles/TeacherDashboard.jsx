@@ -29,6 +29,18 @@ export default function TeacherDashboard({
                 <div className="stat-card"><span className="stat-icon peach" aria-hidden="true">✳</span><span className="stat-label">LEARNERS IMPACTED</span><strong>{learnerCount}</strong><span className="stat-foot">Your influence in action</span></div>
                 <div className="stat-card stat-card-feature"><span className="stat-label">A NOTE TO SELF</span><strong>Knowledge<br />when shared.</strong><span className="stat-foot">Keep inspiring learners.</span><span className="feature-sun" aria-hidden="true">✳</span></div>
             </div>
+            <div className="section-heading">
+                <div><p className="eyebrow">A Place to begin</p><h2>Your courses</h2></div>
+                <button className="text-button" onClick={onViewCourses}>View all courses<span aria-hidden="true">→</span></button>
+            </div>
+            <CourseList
+                courses={ownCourses.slice(0, 3)}
+                enrolledIds={enrolledIds}
+                canEnroll={false}
+                onEnroll={onEnroll}
+                onUnenroll={onUnenroll}
+                isLoading={isLoading}
+            />
         </>
-    )
+    );
 }
