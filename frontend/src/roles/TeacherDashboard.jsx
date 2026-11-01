@@ -10,7 +10,7 @@ export default function TeacherDashboard({
     onEnroll,
     onUnenroll,
     isLoading,
-}) {
+}) { // This function filters the courses to only include those that the user is teaching, and counts the number of learners impacted by those courses.
     const ownCourses = courses.filter(course => course.instructorId === user.id);
     const learnerCount = ownCourses.reduce((count, course) => count + course.enrolledCount, 0);
 
@@ -24,17 +24,17 @@ export default function TeacherDashboard({
                 </div>
                 <button className="button button-primary" onClick={onViewCourses}>Explore the library <span aria-hidden="true">↗</span></button>
             </div>
-            <div className="stats-grid">
+            <div className="stats-grid"> // this block creates the three-card summery the is present at the top of the dashboard.  it uses the stats-grid container to arrange the cards in a compact layout.  starting with Courses the user teaches.
                 <div className="stat-card"><span className="stat-icon mint" aria-hidden="true">▤</span><span className="stat-label">COURSES YOU TEACH</span><strong>{ownCourses.length}</strong><span className="stat-foot">Your teaching journey</span></div>
                 <div className="stat-card"><span className="stat-icon peach" aria-hidden="true">✳</span><span className="stat-label">LEARNERS IMPACTED</span><strong>{learnerCount}</strong><span className="stat-foot">Your influence in action</span></div>
                 <div className="stat-card stat-card-feature"><span className="stat-label">A NOTE TO SELF</span><strong>Knowledge<br />when shared.</strong><span className="stat-foot">Keep inspiring learners.</span><span className="feature-sun" aria-hidden="true">✳</span></div>
             </div>
             <div className="section-heading">
                 <div><p className="eyebrow">A Place to begin</p><h2>Your courses</h2></div>
-                <button className="text-button" onClick={onViewCourses}>View all courses<span aria-hidden="true">→</span></button>
+                <button className="text-button" onClick={onViewCourses}>View all courses<span aria-hidden="true">→</span></button> // this creates a heading area on the dashboard for course recommendations.  and adds a button to view all courses.
             </div>
             <CourseList
-                courses={ownCourses.slice(0, 3)}
+                courses={ownCourses.slice(0, 3)} // this renders a curated course list, it limits the list to the first three courses and keeps the dashboard focused.
                 enrolledIds={enrolledIds}
                 canEnroll={false}
                 onEnroll={onEnroll}
