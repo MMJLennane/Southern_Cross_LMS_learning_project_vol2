@@ -11,5 +11,24 @@ export default function TeacherDashboard({
     onUnenroll,
     isLoading,
 }) {
-    
+    const ownCourses = courses.filter(course => course.instructorId === user.id);
+    const learnerCount = ownCourses.reduce((count, course) => count + course.enrolledCount, 0);
+
+    return ( // This return block renders the teacher dashboard UI, primary action button, "Explore the library".
+        <>
+            <div className="welcome-row">
+                <div>
+                    <p className="eyebrow">Your Teaching, at a glance</p>
+                    <h1>Good to see you. {user.username} <span aria-hidden="true">*</span></h1>
+                    <p className="muted">Your impact grows with every student you inspire.</p>
+                </div>
+                <button className="button button-primary" onClick={onViewCourses}>Explore the library <span aria-hidden="true">↗</span></button>
+            </div>
+            <div className="stats-grid">
+                <div className="stat-card"><span className="stat-icon mint" aria-hidden="true">▤</span><span className="stat-label">COURSES YOU TEACH</span><strong>{ownCourses.length}</strong><span className="stat-foot">Your teaching journey</span></div>
+                <div className="stat-card"><span className="stat-icon peach" aria-hidden="true">✳</span><span className="stat-label">LEARNERS IMPACTED</span><strong>{learnerCount}</strong><span className="stat-foot">Your influence in action</span></div>
+                <div className="stat-card stat-card-feature"><span className="stat-label">A NOTE TO SELF</span><strong>Knowledge<br />when shared.</strong><span className="stat-foot">Keep inspiring learners.</span><span className="feature-sun" aria-hidden="true">✳</span></div>
+            </div>
+        </>
+    )
 }
