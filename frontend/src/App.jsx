@@ -138,7 +138,7 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
             </button>
           )}
         </nav>
-        <div className="sidebar-bottom">
+        <div className="sidebar-bottom">  // app sidebar with positive reinforcement, profile information, and a logout button.  the profile information is shared by all dashboards, and the logout button is always present.
           <div className="help-card">
             <span className="help-sparkle" aria-hidden="true">✳</span>
             <strong>Keep your momentum</strong>
