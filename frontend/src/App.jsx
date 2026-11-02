@@ -37,4 +37,24 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
   const canManageCourses = roleModule?.permissions.canManageCourses ?? false;
   const canEnroll = roleModule?.permissions.canEnroll ?? false;
 
+  const loadDashboard = useCallback(async () => { // Catalog data is public, while only students need their private enrollment list.
+    setIsLoading(true);
+    setError("");
+    try {
+      const courseList = await api.listCourses();
+      setCourses(courseList);
+      if (canEnroll) {
+        setEnrollments(await api.listEnrollments(token));
+      }
+    } catch (requestError) {
+      setError(requestError.message);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [canEnroll, token]);
+
+  useEffect(() => {
+    loadDashboard();
+  }, [loadDashboard]);
+
 }
