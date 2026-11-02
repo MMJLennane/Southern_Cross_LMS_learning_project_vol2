@@ -20,3 +20,21 @@ const roleModules = {
   admin: { component: AdminDashboard, permissions: adminPermissions },
 };
 
+function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed from the API, role flags control which actions and views are shown.
+     const [courses, setCourses] = useState([]);
+  const [enrollments, setEnrollments] = useState([]);
+  const [activeView, setActiveView] = useState("overview");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [isCreatingCourse, setIsCreatingCourse] = useState(false);
+  const [editingCourse, setEditingCourse] = useState(null);
+  const roleModule = roleModules[user.role];
+  const RoleDashboard = roleModule?.component;
+  const enrolledIds = useMemo(
+    () => new Set(enrollments.map((enrollment) => enrollment.course.id)),
+    [enrollments],
+  );
+  const canManageCourses = roleModule?.permissions.canManageCourses ?? false;
+  const canEnroll = roleModule?.permissions.canEnroll ?? false;
+
+}
