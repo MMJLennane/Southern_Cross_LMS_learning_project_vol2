@@ -57,8 +57,7 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
     loadDashboard();
   }, [loadDashboard]);
   
-  
-  async function changeEnrollment(courseId, action) { // After a write, reload both lists so counts and enrolled badges reflect server state.
+    async function changeEnrollment(courseId, action) { // After a write, reload both lists so counts and enrolled badges reflect server state.
     setError("");
     try {
       await action(courseId, token);
