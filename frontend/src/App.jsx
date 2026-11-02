@@ -56,5 +56,41 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
   useEffect(() => {
     loadDashboard();
   }, [loadDashboard]);
+  
+  
+  async function changeEnrollment(courseId, action) { // After a write, reload both lists so counts and enrolled badges reflect server state.
+    setError("");
+    try {
+      await action(courseId, token);
+      setEnrollments(await api.listEnrollments(token));
+      setCourses(await api.listCourses());
+    } catch (requestError) {
+      setError(requestError.message);
+    }
+  }
+
+  async function handleSaveCourse(event) { // The same form creates or edits depending on editingCourse, then refreshes the catalog.
+    event.preventDefault();
+    const formElement = event.currentTarget;
+    setError("");
+    setIsCreatingCourse(true);
+    const form = new FormData(formElement);
+    try {
+      const details = { title: form.get("title"), description: form.get("description") };
+      if (editingCourse) {
+        await api.updateCourse(editingCourse.id, details, token);
+      } else {
+        await api.createCourse(details, token);
+      }
+      formElement.reset();
+      setEditingCourse(null);
+      await loadDashboard();
+      setActiveView("courses");
+    } catch (requestError) {
+      setError(requestError.message);
+    } finally {
+      setIsCreatingCourse(false);
+    }
+  }
 
 }
