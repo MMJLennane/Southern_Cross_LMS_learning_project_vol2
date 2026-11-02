@@ -111,5 +111,25 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
     (course) => user.role === "admin" || course.teacher === user.id,
   );
 
-
+  // Navigation switches local views; the corresponding sections below share the same loaded data.
+  return (
+    <div className="app-shell">
+      <aside className="sidebar">
+        <a className="brand" href="#home" aria-label="Northstar Learning home">
+          <span className="brand-mark">N</span>
+          <span>northstar<span className="brand-dot">.</span></span>
+        </a>
+        <div className="side-label">LEARNING</div>
+        <nav className="side-nav" aria-label="Main navigation">
+          <button className={activeView === "overview" ? "nav-item active" : "nav-item"} onClick={() => setActiveView("overview")}>
+            <span className="nav-icon" aria-hidden="true">⌂</span> Overview
+          </button>
+          <button className={activeView === "courses" ? "nav-item active" : "nav-item"} onClick={() => setActiveView("courses")}>
+            <span className="nav-icon" aria-hidden="true">▤</span> Explore courses
+          </button>
+          {canEnroll && (
+            <button className={activeView === "enrolled" ? "nav-item active" : "nav-item"} onClick={() => setActiveView("enrolled")}>
+              <span className="nav-icon" aria-hidden="true">◷</span> My learning
+            </button>
+          )}
 }
