@@ -162,7 +162,7 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
         </header>
 
         <section className="page-content">
-          {activeView === "overview" && RoleDashboard && (
+          {activeView === "overview" && RoleDashboard && (// This block renders the role-specific dashboard component, passing in the necessary props for user, courses, enrollments, and action handlers.
             <RoleDashboard
               user={user}
               courses={courses}
@@ -191,7 +191,7 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
             </>
           )}
 
-          {activeView === "manage" && canManageCourses && (
+          {activeView === "manage" && canManageCourses && (// this block creates the manage courses view, which is only available to teachers and admins.
             <div className="manage-layout">
               <div className="section-heading page-heading">
                 <div><p className="eyebrow">SHARE WHAT YOU KNOW</p><h1>Manage courses</h1><p className="muted">Create a course for curious minds to discover.</p></div>
@@ -226,4 +226,39 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
       </main>
     </div>
   );
+}
+export default function App() {// The root restores a saved access token, resolves its user, then selects auth or dashboard UI.
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(() => localStorage.getItem("northstar-access-token"));
+  const [isRestoringSession, setIsRestoringSession] = useState(Boolean(token));
+
+  useEffect(() => {
+    if (!token) return;// Invalid/expired tokens are cleared so the app returns to the sign-in form.
+    api.currentUser(token)
+      .then(setUser)
+      .catch(() => {
+        localStorage.removeItem("northstar-access-token");
+        setToken(null);
+      })
+      .finally(() => setIsRestoringSession(false));
+  }, [token]);
+
+  function handleAuthenticated(authenticatedUser, accessToken) {// Persist only the access token; Dashboard receives it for later authenticated API requests.
+    localStorage.setItem("northstar-access-token", accessToken);
+    setToken(accessToken);
+    setUser(authenticatedUser);
+  }
+
+  function handleLogout() {// Clear both persisted and in-memory session state on sign-out.
+    localStorage.removeItem("northstar-access-token");
+    setToken(null);
+    setUser(null);
+  }
+
+  if (isRestoringSession) {
+    return <main className="loading-screen">Opening your learning space…</main>;
+  }
+  return user
+    ? <Dashboard user={user} token={token} onLogout={handleLogout} />
+    : <AuthForm onAuthenticated={handleAuthenticated} />;
 }
