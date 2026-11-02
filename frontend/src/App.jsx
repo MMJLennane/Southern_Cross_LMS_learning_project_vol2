@@ -132,4 +132,26 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
               <span className="nav-icon" aria-hidden="true">◷</span> My learning
             </button>
           )}
+          {canManageCourses && (
+            <button className={activeView === "manage" ? "nav-item active" : "nav-item"} onClick={() => setActiveView("manage")}>
+              <span className="nav-icon" aria-hidden="true">＋</span> Manage courses
+            </button>
+          )}
+        </nav>
+        <div className="sidebar-bottom">
+          <div className="help-card">
+            <span className="help-sparkle" aria-hidden="true">✳</span>
+            <strong>Keep your momentum</strong>
+            <p>One lesson today is a win.</p>
+          </div>
+          <div className="profile-row">
+            <div className="avatar">{user.username.slice(0, 1).toUpperCase()}</div>
+            <div className="profile-info">
+              <strong>{user.username}</strong>
+              <span>{roleNames[user.role] ?? user.role}</span>
+            </div>
+            <button className="logout-button" onClick={onLogout} aria-label="Sign out" title="Sign out">↗</button>
+          </div>
+        </div>
+      </aside>
 }
