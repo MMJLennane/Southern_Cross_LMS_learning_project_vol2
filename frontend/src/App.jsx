@@ -104,4 +104,12 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
     }
   }
 
+  const displayedCourses = activeView === "enrolled"
+    ? courses.filter((course) => enrolledIds.has(course.id))
+    : courses;
+  const managedCourses = courses.filter(
+    (course) => user.role === "admin" || course.teacher === user.id,
+  );
+
+
 }
