@@ -220,4 +220,10 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
               </div>
             </div>
           )}
+          {!RoleDashboard && <div className="error-banner" role="alert">This account has an unsupported role: {user.role}.</div>}
+          {error && <div className="error-banner" role="alert">{error}</div>}
+        </section>
+      </main>
+    </div>
+  );
 }
