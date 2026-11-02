@@ -92,4 +92,17 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
     }
   }
 
+  
+  async function handleDeleteCourse(coruse) { // Deleting a course also deletes its enrollments on the backend, so confirm the cascade.
+    if (!window.confirm(`Delete "${course.title}" and its enrollments?`)) return;
+    setError("");
+    try {
+      await api.deleteCourse(course.id, token);
+      if (editingCourse?.id === course.id) setEditingCourse(null);
+      await loadDashboard();
+    } catch (requestError) {
+      setError(requestError.message);
+    }
+  }
+
 }
