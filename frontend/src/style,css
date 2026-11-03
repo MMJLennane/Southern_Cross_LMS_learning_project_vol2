@@ -17,3 +17,20 @@
   --mint: #ededed;
   --peach: #ededed;
 }
+
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; min-height: 100vh; }
+button, input, textarea { font: inherit; }
+button { cursor: pointer; }
+button:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visible {
+  outline: 3px solid #777;
+  outline-offset: 3px;
+}
+
+h1, h2, h3, p { margin-top: 0; }
+h1, h2, h3, .brand { font-family: Manrope, sans-serif; }
+h1 { margin-bottom: 12px; font-size: clamp(29px, 3vw, 39px); line-height: 1.2; letter-spacing: -1.5px; }
+h2 { margin-bottom: 8px; font-size: 23px; letter-spacing: -.7px; }
+h3 { margin-bottom: 8px; font-size: 19px; letter-spacing: -.45px; }
+.muted { color: var(--muted); }
+.eyebrow { margin-bottom: 10px; color: #789080; font-size: 10px; font-weight: 700; letter-spacing: 1.35px; }
