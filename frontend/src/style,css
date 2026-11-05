@@ -207,3 +207,9 @@ h3 { margin-bottom: 8px; font-size: 19px; letter-spacing: -.45px; }
 .stack input, .stack textarea { border-color: #dedede; }
 .course-footer { border-color: #ededed; }
 .empty-state { border-color: #d8d8d8; background: #fff; }
+
+/* At tablet widths, reduce the course columns and dashboard sidebar footprint. */
+@media (max-width: 1050px) {
+  .app-shell { grid-template-columns: 215px minmax(0, 1fr); }
+  .course-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
