@@ -235,3 +235,14 @@ h3 { margin-bottom: 8px; font-size: 19px; letter-spacing: -.45px; }
   .stat-card-feature { grid-column: 1 / -1; min-height: 130px; }
   .section-heading { margin-top: 31px; }
 }
+
+/* Small phones use single-column cards and vertically stacked management controls. */
+@media (max-width: 480px) {
+  .auth-card { padding: 27px 23px; }
+  .course-grid { grid-template-columns: 1fr; }
+  .course-art { height: 130px; }
+  .section-heading { align-items: flex-start; flex-direction: column; }
+  .section-heading.page-heading { align-items: flex-start; }
+  .managed-course { align-items: flex-start; flex-direction: column; }
+  .nav-item { font-size: 9px; }
+}
