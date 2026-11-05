@@ -1,0 +1,29 @@
+[ VITE DEV SERVER / BUILD TOOL ] ──(Bundles)──> [ BROWSER (Client Runtime) ]
+                                                       │
+                                        ┌──────────────┴──────────────┐
+                                        ▼                             ▼
+                              [ Global State: VITE react ]     [ Server State: Query ]
+                              (Auth state, active UI mode)   (Fetch courses, tracks, quizzes)
+                                        │                             │
+                        ┌───────────────┴─────────────────────────────┴───────────────┐
+                        ▼                                                             ▼
+         ┌─────────────────────────────┐                               ┌─────────────────────────────┐
+         │   [ Public Layout Layer ]   │                               │  [ Dashboard Layout Layer ]  │
+         │   (React Router: /)         │                               │  (React Router: /dashboard) │
+         └──────────────┬──────────────┘                               └──────────────┬─────────────┘
+                        │                                                             │
+         ┌──────────────┴──────────────┐                               ┌──────────────┴─────────────┐
+         ▼                             ▼                               ▼                            ▼
+  [ Landing Page ]              [ Auth Pages ]                 [ Instructor Portal ]        [ Student Portal ]
+  • Hero Section                • Login / Register             • Course Creator App         • Video Player
+  • Course Catalog Grid         • Role Selection               • Quiz Builder               • Progress Bar
+  • Pricing Cards               (Student vs Teacher)           • Student Analytics          • Gradebook
+                        │                                                             │
+                        └───────────────────────────────┬─────────────────────────────┘
+                                                        ▼
+                                       ┌────────────────────────────────┐
+                                       │    [ Core UI Component Kit ]   │
+                                       │  		  	(UI / CSS)			│
+                                       │ • <Button>  • <Card>  • <Input>│
+                                       │ • <VideoPlayer> • <ProgressBar>│
+                                       └────────────────────────────────┘
