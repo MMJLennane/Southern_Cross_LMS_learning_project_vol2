@@ -190,7 +190,7 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
               />
             </>
           )}
-
+// multiple page urls.
           {activeView === "manage" && canManageCourses && (// this block creates the manage courses view, which is only available to teachers and admins.
             <div className="manage-layout">
               <div className="section-heading page-heading">
