@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { api } from "./api.js";
 import AuthForm from "./components/AuthForm.jsx";
+import Button from "./components/button/button.jsx";
 import CourseList from "./components/CourseList.jsx";
 import AdminDashboard, { permissions as adminPermissions } from "./roles/AdminDashboard.jsx";
 import StudentDashboard, { permissions as studentPermissions } from "./roles/StudentDashboard.jsx";
