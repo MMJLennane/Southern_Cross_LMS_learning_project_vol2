@@ -116,7 +116,7 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
   return (
     <div className="app-shell">
       <aside className="sidebar">
-        <a className="brand" href="#home" aria-label="Northstar Learning home">
+        <a className="brand" href="#home" aria-label="Southern Cross Learning home">
           <span className="brand-mark">N</span>
           <span>northstar<span className="brand-dot">.</span></span>
         </a>
