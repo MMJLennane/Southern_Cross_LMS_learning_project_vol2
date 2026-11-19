@@ -4,7 +4,7 @@ import { api } from "./api.js";
 import AuthForm from "./components/AuthForm.jsx";
 import Button from "./components/button/button.jsx";
 import CourseList from "./components/CourseList.jsx";
-import AdminDashboard, { permissions as adminPermissions } from "./roles/AdminDashboard.jsx";
+import AdminDashboard, { AdminUsersDashboard, permissions as adminPermissions } from "./roles/AdminDashboard.jsx";
 import StudentDashboard, { permissions as studentPermissions } from "./roles/StudentDashboard.jsx";
 import TeacherDashboard, { permissions as teacherPermissions } from "./roles/TeacherDashboard.jsx";
 
@@ -21,11 +21,43 @@ const roleModules = {
   admin: { component: AdminDashboard, permissions: adminPermissions },
 };
 
+const viewPaths = {
+  overview: "#/workspace",
+  courses: "#/courses",
+  enrolled: "#/learning",
+  manage: "#/courses",
+  users: "#/users",
+};
+
+const ACCESS_TOKEN_KEY = "southern-cross-learning-access-token";
+const LEGACY_ACCESS_TOKEN_KEY = "northstar-access-token";
+
+function getStoredAccessToken() {
+  const token = localStorage.getItem(ACCESS_TOKEN_KEY)
+    ?? localStorage.getItem(LEGACY_ACCESS_TOKEN_KEY);
+  if (token) {
+    localStorage.setItem(ACCESS_TOKEN_KEY, token);
+  }
+  localStorage.removeItem(LEGACY_ACCESS_TOKEN_KEY);
+  return token;
+}
+
+function viewFromHash(hash, role) {
+  const view = {
+    "#/workspace": "overview",
+    "#/courses": roleModules[role]?.permissions.canManageCourses ? "manage" : "courses",
+    "#/learning": roleModules[role]?.permissions.canEnroll ? "enrolled" : "overview",
+    "#/users": roleModules[role]?.permissions.canManageUsers ? "users" : "overview",
+  }[hash || "#/workspace"] ?? "overview";
+
+  return view;
+}
+
 function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed from the API, role flags control which actions and views are shown.
      const [courses, setCourses] = useState([]);
   const [enrollments, setEnrollments] = useState([]);
      const [users, setUsers] = useState([]);
-  const [activeView, setActiveView] = useState("overview");
+  const [activeView, setActiveView] = useState(() => viewFromHash(window.location.hash, user.role));
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isCreatingCourse, setIsCreatingCourse] = useState(false);
@@ -40,6 +72,28 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
   const canManageCourses = roleModule?.permissions.canManageCourses ?? false;
   const canManageUsers = roleModule?.permissions.canManageUsers ?? false;
   const canEnroll = roleModule?.permissions.canEnroll ?? false;
+
+  const navigateTo = useCallback((view) => {
+    setActiveView(view);
+    const path = viewPaths[view];
+    if (path && window.location.hash !== path) {
+      window.location.hash = path;
+    }
+  }, []);
+
+  useEffect(() => {
+    function syncViewWithLocation() {
+      setActiveView(viewFromHash(window.location.hash, user.role));
+    }
+
+    window.addEventListener("hashchange", syncViewWithLocation);
+    if (!window.location.hash) {
+      window.location.hash = viewPaths.overview;
+    } else {
+      syncViewWithLocation();
+    }
+    return () => window.removeEventListener("hashchange", syncViewWithLocation);
+  }, [user.role]);
 
   const loadDashboard = useCallback(async () => { // Catalog data is public, while only students need their private enrollment list.
     setIsLoading(true);
@@ -106,7 +160,7 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
       formElement.reset();
       setEditingCourse(null);
       await loadDashboard();
-      setActiveView("courses");
+      navigateTo("manage");
     } catch (requestError) {
       setError(requestError.message);
     } finally {
@@ -137,26 +191,26 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
   return (
     <div className="app-shell">
       <aside className="sidebar">
-        <a className="brand" href="#home" aria-label="Southern Cross Learning home">
+        <a className="brand" href="#/workspace" aria-label="Southern Cross Learning home">
           <span className="brand-mark">S</span>
-          <span>southern cross<span className="brand-dot">.</span></span>
+          <span>Southern Cross<span className="brand-dot">.</span></span>
         </a>
         <div className="side-label">LEARNING</div>
         <nav className="side-nav" aria-label="Main navigation">
-          <Button variant="reset" className={activeView === "overview" ? "nav-item active" : "nav-item"} onClick={() => setActiveView("overview")}>
-            <span className="nav-icon" aria-hidden="true">⌂</span> Overview
+          <Button variant="reset" className={activeView === "overview" ? "nav-item active" : "nav-item"} onClick={() => navigateTo("overview")}>
+            <span className="nav-icon" aria-hidden="true">⌂</span> Workspace
           </Button>
-          <Button variant="reset" className={activeView === "courses" ? "nav-item active" : "nav-item"} onClick={() => setActiveView("courses")}>
-            <span className="nav-icon" aria-hidden="true">▤</span> Explore courses
+          <Button variant="reset" className={activeView === "manage" || activeView === "courses" ? "nav-item active" : "nav-item"} onClick={() => navigateTo(canManageCourses ? "manage" : "courses")}>
+            <span className="nav-icon" aria-hidden="true">▤</span> Courses
           </Button>
           {canEnroll && (
-            <Button variant="reset" className={activeView === "enrolled" ? "nav-item active" : "nav-item"} onClick={() => setActiveView("enrolled")}>
+            <Button variant="reset" className={activeView === "enrolled" ? "nav-item active" : "nav-item"} onClick={() => navigateTo("enrolled")}>
               <span className="nav-icon" aria-hidden="true">◷</span> My learning
             </Button>
           )}
-          {canManageCourses && (
-            <Button variant="reset" className={activeView === "manage" ? "nav-item active" : "nav-item"} onClick={() => setActiveView("manage")}>
-              <span className="nav-icon" aria-hidden="true">＋</span> Manage courses
+          {canManageUsers && (
+            <Button variant="reset" className={activeView === "users" ? "nav-item active" : "nav-item"} onClick={() => navigateTo("users")}>
+              <span className="nav-icon" aria-hidden="true">♙</span> Users
             </Button>
           )}
         </nav>
@@ -179,7 +233,7 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
 
       <main className="main-panel">
         <header className="topbar">
-          <div className="breadcrumb"><span>Workspace</span><span aria-hidden="true">/</span><strong>{activeView === "manage" ? "Manage courses" : activeView === "enrolled" ? "My learning" : activeView === "courses" ? "Explore courses" : "Overview"}</strong></div>
+          <div className="breadcrumb"><span>Workspace</span><span aria-hidden="true">/</span><strong>{activeView === "manage" ? "Manage courses" : activeView === "users" ? "Manage users" : activeView === "enrolled" ? "My learning" : activeView === "courses" ? "Explore courses" : "Overview"}</strong></div>
           <div className="topbar-right"><span className="today-label">A good day to learn something new.</span><div className="avatar avatar-small">{user.username.slice(0, 1).toUpperCase()}</div></div>
         </header>
 
@@ -190,7 +244,7 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
               courses={courses}
               enrollments={enrollments}
               enrolledIds={enrolledIds}
-              onViewCourses={() => setActiveView("courses")}
+              onViewCourses={() => navigateTo(canManageCourses ? "manage" : "courses")}
               onEnroll={(id) => changeEnrollment(id, api.enroll)}
               onUnenroll={(id) => changeEnrollment(id, api.unenroll)}
               isLoading={isLoading}
@@ -244,6 +298,14 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
               </div>
             </div>
           )}
+          {activeView === "users" && canManageUsers && (
+            <AdminUsersDashboard
+              users={users}
+              onUpdateUserRole={changeUserRole}
+              isUpdatingUserRole={isUpdatingUserRole}
+              isLoading={isLoading}
+            />
+          )}
           {!RoleDashboard && <div className="error-banner" role="alert">This account has an unsupported role: {user.role}.</div>}
           {error && <div className="error-banner" role="alert">{error}</div>}
         </section>
@@ -253,7 +315,7 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
 }
 export default function App() {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(() => localStorage.getItem("northstar-access-token"));
+  const [token, setToken] = useState(getStoredAccessToken);
   const [isRestoringSession, setIsRestoringSession] = useState(Boolean(token));
 
   useEffect(() => {
@@ -261,20 +323,20 @@ export default function App() {
     api.currentUser(token)
       .then(setUser)
       .catch(() => {
-        localStorage.removeItem("northstar-access-token");
+        localStorage.removeItem(ACCESS_TOKEN_KEY);
         setToken(null);
       })
       .finally(() => setIsRestoringSession(false));
   }, [token]);
 
   function handleAuthenticated(authenticatedUser, accessToken) {// Persist only the access token; Dashboard receives it for later authenticated API requests.
-    localStorage.setItem("northstar-access-token", accessToken);
+    localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
     setToken(accessToken);
     setUser(authenticatedUser);
   }
 
   function handleLogout() {// Clear both persisted and in-memory session state on sign-out.
-    localStorage.removeItem("northstar-access-token");
+    localStorage.removeItem(ACCESS_TOKEN_KEY);
     setToken(null);
     setUser(null);
   }
