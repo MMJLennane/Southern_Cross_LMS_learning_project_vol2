@@ -1,3 +1,5 @@
+import Button from "./button/button.jsx";
+
 function CourseCard({ course, isEnrolled, canEnroll, onEnroll, onUnenroll }) {
     // This component renders the visual card for a single course.
     return ( 
@@ -15,12 +17,12 @@ function CourseCard({ course, isEnrolled, canEnroll, onEnroll, onUnenroll }) {
                 <div className="course-footer">
                     <span className="teacher-name">with {course.teacher_name}</span>
                     {canEnroll && (
-                        <button
-                            className={`button ${isEnrolled ? "button-quiet" :"button-outline"}`}
+                        <Button
+                            variant={isEnrolled ? "quiet" : "outline"}
                             onClick={() => (isEnrolled ? onUnenroll(course.id) : onEnroll(course.id))}
                         >
                                 {isEnrolled ? "Leave course" : "Explore course"}
-                        </button>
+                        </Button>
                     )}
                 </div>
             </div>
@@ -36,7 +38,7 @@ export default function CourseList({
     onUnenroll,
     isLoading,
 }) {
-    if (isLoading) return <P className="empty-state">Loading courses...</P>;
+    if (isLoading) return <p className="empty-state">Loading courses...</p>;
     if (courses.length === 0) {
         return <p className="empty-state">No courses are here just yet.  Check back soon for a new place to start.</p>
     }
