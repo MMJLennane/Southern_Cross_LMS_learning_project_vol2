@@ -25,7 +25,7 @@ export default function TeacherDashboard({
                 </div>
                 <Button onClick={onViewCourses}>Explore the library <span aria-hidden="true">↗</span></Button>
             </div>
-            <div className="stats-grid"> // this block creates the three-card summery the is present at the top of the dashboard.  it uses the stats-grid container to arrange the cards in a compact layout.  starting with Courses the user teaches.
+            <div className="stats-grid">
                 <div className="stat-card"><span className="stat-icon mint" aria-hidden="true">▤</span><span className="stat-label">COURSES YOU TEACH</span><strong>{ownCourses.length}</strong><span className="stat-foot">Your teaching journey</span></div>
                 <div className="stat-card"><span className="stat-icon peach" aria-hidden="true">✳</span><span className="stat-label">LEARNERS IMPACTED</span><strong>{learnerCount}</strong><span className="stat-foot">Your influence in action</span></div>
                 <div className="stat-card stat-card-feature"><span className="stat-label">A NOTE TO SELF</span><strong>Knowledge<br />when shared.</strong><span className="stat-foot">Keep inspiring learners.</span><span className="feature-sun" aria-hidden="true">✳</span></div>
@@ -35,7 +35,7 @@ export default function TeacherDashboard({
                 <Button variant="text" onClick={onViewCourses}>View all courses<span aria-hidden="true">→</span></Button>
             </div>
             <CourseList
-                courses={ownCourses.slice(0, 3)} // this renders a curated course list, it limits the list to the first three courses and keeps the dashboard focused.
+                courses={ownCourses.slice(0, 3)}
                 enrolledIds={enrolledIds}
                 canEnroll={false}
                 onEnroll={onEnroll}
