@@ -1,7 +1,7 @@
 .button {
   min-height: 41px;
   padding: 0 16px;
-  border: 1px solid transparent;
+  border: 1px solid var(--transparent);
   border-radius: 8px;
   font-size: 12px;
   font-weight: 700;
@@ -17,8 +17,12 @@
   opacity: .65;
 }
 
+.button-reset:hover {
+  transform: none;
+}
+
 .button-primary {
-  color: #fff;
+  color: var(--paper);
   background: var(--green);
 }
 
@@ -28,35 +32,35 @@
 
 .button-outline {
   color: var(--green);
-  border-color: #cbd8ce;
-  background: white;
+  border-color: var(--line);
+  background: var(--paper);
 }
 
 .button-outline:hover,
 .button-quiet:hover {
-  background: #edf4ee;
+  background: var(--tone-wash);
 }
 
 .button-quiet {
-  color: #59665e;
+  color: var(--tone-mid);
   border-color: var(--line);
-  background: #f6f8f5;
+  background: var(--tone-wash);
 }
 
-.full-width {
+.button-full-width {
   width: 100%;
 }
 
-.text-button {
+.button-text {
   min-height: auto;
   padding: 0;
   border: 0;
   color: var(--green);
-  background: transparent;
+  background: var(--transparent);
   font-size: 12px;
   font-weight: 700;
 }
 
-.text-button:hover {
-  color: #547a65;
+.button-text:hover {
+  color: var(--tone-mid);
 }
