@@ -24,10 +24,12 @@ const roleModules = {
 function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed from the API, role flags control which actions and views are shown.
      const [courses, setCourses] = useState([]);
   const [enrollments, setEnrollments] = useState([]);
+     const [users, setUsers] = useState([]);
   const [activeView, setActiveView] = useState("overview");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isCreatingCourse, setIsCreatingCourse] = useState(false);
+     const [isUpdatingUserRole, setIsUpdatingUserRole] = useState(false);
   const [editingCourse, setEditingCourse] = useState(null);
   const roleModule = roleModules[user.role];
   const RoleDashboard = roleModule?.component;
@@ -36,6 +38,7 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
     [enrollments],
   );
   const canManageCourses = roleModule?.permissions.canManageCourses ?? false;
+  const canManageUsers = roleModule?.permissions.canManageUsers ?? false;
   const canEnroll = roleModule?.permissions.canEnroll ?? false;
 
   const loadDashboard = useCallback(async () => { // Catalog data is public, while only students need their private enrollment list.
@@ -47,12 +50,15 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
       if (canEnroll) {
         setEnrollments(await api.listEnrollments(token));
       }
+      if (canManageUsers) {
+        setUsers(await api.listUsers(token));
+      }
     } catch (requestError) {
       setError(requestError.message);
     } finally {
       setIsLoading(false);
     }
-  }, [canEnroll, token]);
+  }, [canEnroll, canManageUsers, token]);
 
   useEffect(() => {
     loadDashboard();
@@ -66,6 +72,21 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
       setCourses(await api.listCourses());
     } catch (requestError) {
       setError(requestError.message);
+    }
+  }
+
+  async function changeUserRole(userId, role) {
+    setError("");
+    setIsUpdatingUserRole(true);
+    try {
+      const updatedUser = await api.updateUserRole(userId, role, token);
+      setUsers((currentUsers) =>
+        currentUsers.map((account) => account.id === updatedUser.id ? updatedUser : account),
+      );
+    } catch (requestError) {
+      setError(requestError.message);
+    } finally {
+      setIsUpdatingUserRole(false);
     }
   }
 
@@ -117,8 +138,8 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
     <div className="app-shell">
       <aside className="sidebar">
         <a className="brand" href="#home" aria-label="Southern Cross Learning home">
-          <span className="brand-mark">N</span>
-          <span>northstar<span className="brand-dot">.</span></span>
+          <span className="brand-mark">S</span>
+          <span>southern cross<span className="brand-dot">.</span></span>
         </a>
         <div className="side-label">LEARNING</div>
         <nav className="side-nav" aria-label="Main navigation">
@@ -173,6 +194,9 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
               onEnroll={(id) => changeEnrollment(id, api.enroll)}
               onUnenroll={(id) => changeEnrollment(id, api.unenroll)}
               isLoading={isLoading}
+              users={users}
+              onUpdateUserRole={changeUserRole}
+              isUpdatingUserRole={isUpdatingUserRole}
             />
           )}
 
