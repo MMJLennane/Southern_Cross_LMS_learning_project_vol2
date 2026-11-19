@@ -1,7 +1,7 @@
 import CourseList from "../components/CourseList.jsx";
 import Button from "../components/button/button.jsx";
 
-export const permissions = { canEnroll: false, canManageCourses: true };
+export const permissions = { canEnroll: false, canManageCourses: true, canManageUsers: true };
 // This section sets up the admin dashboard component and definds its role-based permissions.
 export default function AdminDashboard({
     user,
@@ -11,6 +11,9 @@ export default function AdminDashboard({
     onEnroll,
     onUnenroll,
     isLoading,
+    users,
+    onUpdateUserRole,
+    isUpdatingUserRole,
 }) {
     const learnerCount = courses.reduce((total, course) => total + course.enrollment_count, 0);
     // This block defines the dashboard's visible layout and content.
@@ -41,6 +44,49 @@ export default function AdminDashboard({
         onUnenroll={onUnenroll}
         isLoading={isLoading}
       />
+      <section className="admin-tasks" aria-labelledby="admin-users-heading">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow">ACCOUNT ACCESS</p>
+            <h2 id="admin-users-heading">Manage users <span className="count-badge">{users.length}</span></h2>
+          </div>
+        </div>
+        <div className="user-table-wrap">
+          <table className="user-table">
+            <thead>
+              <tr><th scope="col">Username</th><th scope="col">Email</th><th scope="col">Role</th></tr>
+            </thead>
+            <tbody>
+              {users.map((account) => (
+                <tr key={account.id}>
+                  <td>{account.username}</td>
+                  <td>{account.email || "—"}</td>
+                  <td>
+                    {account.role === "admin" ? (
+                      <span className="role-label">Administrator</span>
+                    ) : (
+                      <>
+                        <label className="visually-hidden" htmlFor={`user-role-${account.id}`}>
+                          Change role for {account.username}
+                        </label>
+                        <select
+                          id={`user-role-${account.id}`}
+                          value={account.role}
+                          disabled={isUpdatingUserRole}
+                          onChange={(event) => onUpdateUserRole(account.id, event.target.value)}
+                        >
+                          <option value="student">Student</option>
+                          <option value="teacher">Teacher</option>
+                        </select>
+                      </>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
     </>
   );
 }

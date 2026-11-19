@@ -12,8 +12,8 @@ export default function TeacherDashboard({
     onUnenroll,
     isLoading,
 }) { // This function filters the courses to only include those that the user is teaching, and counts the number of learners impacted by those courses.
-    const ownCourses = courses.filter(course => course.instructorId === user.id);
-    const learnerCount = ownCourses.reduce((count, course) => count + course.enrolledCount, 0);
+    const ownCourses = courses.filter((course) => course.teacher === user.id);
+    const learnerCount = ownCourses.reduce((count, course) => count + course.enrollment_count, 0);
 
     return ( // This return block renders the teacher dashboard UI, primary action button, "Explore the library".
         <>

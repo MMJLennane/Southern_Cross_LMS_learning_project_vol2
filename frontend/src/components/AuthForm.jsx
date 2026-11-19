@@ -46,7 +46,7 @@ export default function AuthForm({ onAuthenticated }) {
                 </div>
             </section>
             <section className="auth-card" aria-labelledby="auth-title">
-        <div className="brand-mark" aria-hidden="true">N</div>
+        <div className="brand-mark" aria-hidden="true">S</div>
         <p className="eyebrow">YOUR LEARNING SPACE</p>
         <h2 id="auth-title">{isRegistering ? "Create your account" : "Welcome back"}</h2>
         <p className="muted">
@@ -79,7 +79,7 @@ export default function AuthForm({ onAuthenticated }) {
           </Button>
         </form>
         <p className="switch-auth">
-          {isRegistering ? "Already have an account?" : "New to Northstar?"}{" "}
+          {isRegistering ? "Already have an account?" : "New to Southern Cross?"}{" "}
           <Button
             variant="text"
             type="button"
