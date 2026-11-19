@@ -1,11 +1,11 @@
-const API_BASE_URL = import.meta.env.Vite_API.URL ?? "http://127.0.0.1:8000/api";
+const API_BASE_URL = (import.meta.env.VITE_API_URL ?? "http://127.0.0.1:8000/api").replace(/\/+$/, "");
 
 // Centralized fetch details so UI components share JSON handling, JWT auth, and API errors.
 async function request(path, { token, ...options } = {}) {
-    const reponse = await fetch(`${API_BASE_URL}${path}`, {
+    const response = await fetch(`${API_BASE_URL}${path}`, {
         ...options,
         headers: {
-            ...(options.body ? { "content-Type": "application/json" } : {}),
+            ...(options.body ? { "Content-Type": "application/json" } : {}),
             ...(token ? { Authorization: `Bearer ${token}` } : {}),
             ...options.headers,
         },
@@ -13,7 +13,9 @@ async function request(path, { token, ...options } = {}) {
 
     if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        const message = Oject.values(errorData).flat().join(" ") || "The request failed.";
+        const message = errorData && typeof errorData === "object"
+            ? Object.values(errorData).flat().join(" ") || "The request failed."
+            : "The request failed.";
         throw new Error(message);
     }
 
@@ -29,6 +31,13 @@ export const api = {
         request("/auth/token/", { method: "POST", body: JSON.stringify(credentials) }),
     currentUser: (token) => request("/auth/me/", { token }),
     listEnrollments: (token) => request("/enrollments/", { token }),
+    listUsers: (token) => request("/admin/users/", { token }),
+    updateUserRole: (userId, role, token) =>
+        request(`/admin/users/${userId}/role/`, {
+            method: "PATCH",
+            body: JSON.stringify({ role }),
+            token,
+        }),
     enroll: (courseId, token) =>
         request(`/courses/${courseId}/enroll/`, { method: "POST", token }),
     unenroll: (courseId, token) =>
