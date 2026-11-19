@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import { api } from "../api.js";
+import Button from "./button/button.jsx";
 
 export default function AuthForm({ onAuthenticated }) {
     const [isRegistering, setIsRegistering] = useState(false);
@@ -29,17 +30,17 @@ export default function AuthForm({ onAuthenticated }) {
         } catch (requestError) {
             setError(requestError.message); 
         } finally {
-            setItSubmitting(false);
+            setIsSubmitting(false);
         }
     }
 
     return (
-        <main className="auth=layout">
+        <main className="auth-layout">
             <section className="auth-copy">
                 <span className="eyebrow">Southern Cross Learning</span>
                 <h1>Learning on your terms, in your own time.</h1>
                 <p>Taking the learning with you in life, taylored to your lifestyle, letting you become the next version of you.</p>
-                <div className="auth-note>"
+                <div className="auth-note">
                     <span className="note-mark" aria-hidden="true">*</span>
                     <span>Taking small steps will lead to a bigger life. Start with one course.</span>
                 </div>
@@ -73,14 +74,14 @@ export default function AuthForm({ onAuthenticated }) {
             />
           </label>
           {error && <p className="form-error" role="alert">{error}</p>}
-          <button className="button button-primary full-width" disabled={isSubmitting}>
+          <Button type="submit" fullWidth disabled={isSubmitting}>
             {isSubmitting ? "Please wait…" : isRegistering ? "Create account" : "Sign in"}
-          </button>
+          </Button>
         </form>
         <p className="switch-auth">
           {isRegistering ? "Already have an account?" : "New to Northstar?"}{" "}
-          <button
-            className="text-button"
+          <Button
+            variant="text"
             type="button"
             onClick={() => {
               setError("");
@@ -88,7 +89,7 @@ export default function AuthForm({ onAuthenticated }) {
             }}
           >
             {isRegistering ? "Sign in" : "Create an account"}
-          </button>
+          </Button>
         </p>
       </section>
     </main>
