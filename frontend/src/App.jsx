@@ -139,7 +139,7 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
             </Button>
           )}
         </nav>
-        <div className="sidebar-bottom">  // app sidebar with positive reinforcement, profile information, and a logout button.  the profile information is shared by all dashboards, and the logout button is always present.
+        <div className="sidebar-bottom">
           <div className="help-card">
             <span className="help-sparkle" aria-hidden="true">✳</span>
             <strong>Keep your momentum</strong>
@@ -156,14 +156,14 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
         </div>
       </aside>
 
-      <main className="main-panel">// Top bar and main course content area.
+      <main className="main-panel">
         <header className="topbar">
           <div className="breadcrumb"><span>Workspace</span><span aria-hidden="true">/</span><strong>{activeView === "manage" ? "Manage courses" : activeView === "enrolled" ? "My learning" : activeView === "courses" ? "Explore courses" : "Overview"}</strong></div>
           <div className="topbar-right"><span className="today-label">A good day to learn something new.</span><div className="avatar avatar-small">{user.username.slice(0, 1).toUpperCase()}</div></div>
         </header>
 
         <section className="page-content">
-          {activeView === "overview" && RoleDashboard && (// This block renders the role-specific dashboard component, passing in the necessary props for user, courses, enrollments, and action handlers.
+          {activeView === "overview" && RoleDashboard && (
             <RoleDashboard
               user={user}
               courses={courses}
@@ -191,8 +191,7 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
               />
             </>
           )}
-// multiple page urls.
-          {activeView === "manage" && canManageCourses && (// this block creates the manage courses view, which is only available to teachers and admins.
+          {activeView === "manage" && canManageCourses && (
             <div className="manage-layout">
               <div className="section-heading page-heading">
                 <div><p className="eyebrow">SHARE WHAT YOU KNOW</p><h1>Manage courses</h1><p className="muted">Create a course for curious minds to discover.</p></div>
@@ -228,7 +227,7 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
     </div>
   );
 }
-export default function App() {// The root restores a saved access token, resolves its user, then selects auth or dashboard UI.
+export default function App() {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(() => localStorage.getItem("northstar-access-token"));
   const [isRestoringSession, setIsRestoringSession] = useState(Boolean(token));
