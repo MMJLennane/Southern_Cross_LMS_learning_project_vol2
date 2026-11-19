@@ -11,7 +11,7 @@ export default function AdminDashboard({
     onEnroll,
     onUnenroll,
     isLoading,
-    users,
+    users = [],
     onUpdateUserRole,
     isUpdatingUserRole,
 }) {
