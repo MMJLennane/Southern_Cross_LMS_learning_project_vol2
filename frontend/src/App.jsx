@@ -122,21 +122,21 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
         </a>
         <div className="side-label">LEARNING</div>
         <nav className="side-nav" aria-label="Main navigation">
-          <button className={activeView === "overview" ? "nav-item active" : "nav-item"} onClick={() => setActiveView("overview")}>
+          <Button variant="reset" className={activeView === "overview" ? "nav-item active" : "nav-item"} onClick={() => setActiveView("overview")}>
             <span className="nav-icon" aria-hidden="true">⌂</span> Overview
-          </button>
-          <button className={activeView === "courses" ? "nav-item active" : "nav-item"} onClick={() => setActiveView("courses")}>
+          </Button>
+          <Button variant="reset" className={activeView === "courses" ? "nav-item active" : "nav-item"} onClick={() => setActiveView("courses")}>
             <span className="nav-icon" aria-hidden="true">▤</span> Explore courses
-          </button>
+          </Button>
           {canEnroll && (
-            <button className={activeView === "enrolled" ? "nav-item active" : "nav-item"} onClick={() => setActiveView("enrolled")}>
+            <Button variant="reset" className={activeView === "enrolled" ? "nav-item active" : "nav-item"} onClick={() => setActiveView("enrolled")}>
               <span className="nav-icon" aria-hidden="true">◷</span> My learning
-            </button>
+            </Button>
           )}
           {canManageCourses && (
-            <button className={activeView === "manage" ? "nav-item active" : "nav-item"} onClick={() => setActiveView("manage")}>
+            <Button variant="reset" className={activeView === "manage" ? "nav-item active" : "nav-item"} onClick={() => setActiveView("manage")}>
               <span className="nav-icon" aria-hidden="true">＋</span> Manage courses
-            </button>
+            </Button>
           )}
         </nav>
         <div className="sidebar-bottom">  // app sidebar with positive reinforcement, profile information, and a logout button.  the profile information is shared by all dashboards, and the logout button is always present.
@@ -151,7 +151,7 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
               <strong>{user.username}</strong>
               <span>{roleNames[user.role] ?? user.role}</span>
             </div>
-            <button className="logout-button" onClick={onLogout} aria-label="Sign out" title="Sign out">↗</button>
+            <Button variant="reset" className="logout-button" onClick={onLogout} aria-label="Sign out" title="Sign out">↗</Button>
           </div>
         </div>
       </aside>
@@ -200,11 +200,11 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
               <form key={editingCourse?.id ?? "new-course"} className="manage-card stack" onSubmit={handleSaveCourse}>
                 <div className="manage-form-heading">
                   <h2>{editingCourse ? "Edit course" : "Create a course"}</h2>
-                  {editingCourse && <button type="button" className="text-button" onClick={() => setEditingCourse(null)}>Cancel edit</button>}
+                  {editingCourse && <Button variant="text" type="button" onClick={() => setEditingCourse(null)}>Cancel edit</Button>}
                 </div>
                 <label>Course title<input name="title" maxLength="160" defaultValue={editingCourse?.title ?? ""} required /></label>
                 <label>Course description<textarea name="description" rows="5" defaultValue={editingCourse?.description ?? ""} required /></label>
-                <div><button className="button button-primary" disabled={isCreatingCourse}>{isCreatingCourse ? "Saving…" : editingCourse ? "Save changes" : "Publish course"}</button></div>
+                <div><Button type="submit" disabled={isCreatingCourse}>{isCreatingCourse ? "Saving…" : editingCourse ? "Save changes" : "Publish course"}</Button></div>
               </form>
               <div className="managed-courses">
                 <h2>Your courses</h2>
@@ -213,8 +213,8 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
                   <article className="managed-course" key={course.id}>
                     <div><strong>{course.title}</strong><p>{course.description}</p></div>
                     <div className="managed-course-actions">
-                      <button className="button button-outline" onClick={() => setEditingCourse(course)}>Edit</button>
-                      <button className="button button-quiet" onClick={() => handleDeleteCourse(course)}>Delete</button>
+                      <Button variant="outline" onClick={() => setEditingCourse(course)}>Edit</Button>
+                      <Button variant="quiet" onClick={() => handleDeleteCourse(course)}>Delete</Button>
                     </div>
                   </article>
                 ))}
