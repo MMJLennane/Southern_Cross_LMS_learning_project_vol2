@@ -11,6 +11,16 @@ Southern Cross Learning is a full-stack learning management system. Students can
 
 The design references are [core/logic basic.JPG](core/logic%20basic.JPG) and [core/baseline layout concept.txt](core/baseline%20layout%20concept.txt).
 
+## Interface screenshots
+
+### Admin
+
+![Admin interface](core/admin%20basic.JPG)
+
+### Student
+
+![Student interface](core/Student%20basic.JPG)
+
 ## Run locally
 
 ### Backend
