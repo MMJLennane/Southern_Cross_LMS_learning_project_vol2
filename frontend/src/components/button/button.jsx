@@ -5,6 +5,7 @@ const variantClassNames = {
     outline: "button-outline",
     quiet: "button-quiet",
     text: "button-text",
+    reset: "button-reset",
 };
 
 export default function Button({
@@ -17,7 +18,7 @@ export default function Button({
 }) {
     const variantClassName = variantClassNames[variant] ?? "button-primary";
     const classes = [
-        "button",
+        variant === "reset" ? "" : "button",
         variantClassName,
         fullWidth ? "button-full-width" : "",
         className,
