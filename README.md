@@ -42,6 +42,15 @@ npm run start
 
 The frontend opens at `http://localhost:5173`. The example `VITE_API_URL` points to the local backend. Restart Vite after changing the value.
 
+## Frontend pages
+
+The sidebar uses hash-based routes so each view can be opened directly and browser back/forward navigation works:
+
+- `#/workspace` — role-specific overview
+- `#/courses` — course management for teachers/admins, course catalog for students
+- `#/users` — admin-only user management
+- `#/learning` — student enrollments
+
 ## API overview
 
 | Method | Endpoint | Purpose |
