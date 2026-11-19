@@ -158,7 +158,8 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
             </Button>
           )}
         </nav>
-        <div className="sidebar-bottom">  // app sidebar with positive reinforcement, profile information, and a logout button.  the profile information is shared by all dashboards, and the logout button is always present.
+        // app sidebar with positive reinforcement, profile information, and a logout button.  the profile information is shared by all dashboards, and the logout button is always present.
+        <div className="sidebar-bottom">  
           <div className="help-card">
             <span className="help-sparkle" aria-hidden="true">✳</span>
             <strong>Keep your momentum</strong>
@@ -174,8 +175,8 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
           </div>
         </div>
       </aside>
-
-      <main className="main-panel">// Top bar and main course content area.
+          // Top bar and main course content area.
+      <main className="main-panel">
         <header className="topbar">
           <div className="breadcrumb"><span>Workspace</span><span aria-hidden="true">/</span><strong>{activeView === "manage" ? "Manage courses" : activeView === "enrolled" ? "My learning" : activeView === "courses" ? "Explore courses" : "Overview"}</strong></div>
           <div className="topbar-right"><span className="today-label">A good day to learn something new.</span><div className="avatar avatar-small">{user.username.slice(0, 1).toUpperCase()}</div></div>
