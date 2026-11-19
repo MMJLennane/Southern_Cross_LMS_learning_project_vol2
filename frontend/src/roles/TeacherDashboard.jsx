@@ -1,4 +1,5 @@
 import CourseList from "../components/CourseList.jsx";
+import Button from "../components/button/button.jsx";
 // This is the teacher focused dasboard component for the frontend.  it is similar to the student dashboard but with a few key differences.  it does not have a course enrollment button, and it has a different set of permissions.
 export const permissions = { canEnroll: false, canManageCourses: true };
 
@@ -22,7 +23,7 @@ export default function TeacherDashboard({
                     <h1>Good to see you. {user.username} <span aria-hidden="true">*</span></h1>
                     <p className="muted">Your impact grows with every student you inspire.</p>
                 </div>
-                <button className="button button-primary" onClick={onViewCourses}>Explore the library <span aria-hidden="true">↗</span></button>
+                <Button onClick={onViewCourses}>Explore the library <span aria-hidden="true">↗</span></Button>
             </div>
             <div className="stats-grid"> // this block creates the three-card summery the is present at the top of the dashboard.  it uses the stats-grid container to arrange the cards in a compact layout.  starting with Courses the user teaches.
                 <div className="stat-card"><span className="stat-icon mint" aria-hidden="true">▤</span><span className="stat-label">COURSES YOU TEACH</span><strong>{ownCourses.length}</strong><span className="stat-foot">Your teaching journey</span></div>
@@ -31,7 +32,7 @@ export default function TeacherDashboard({
             </div>
             <div className="section-heading">
                 <div><p className="eyebrow">A Place to begin</p><h2>Your courses</h2></div>
-                <button className="text-button" onClick={onViewCourses}>View all courses<span aria-hidden="true">→</span></button> // this creates a heading area on the dashboard for course recommendations.  and adds a button to view all courses.
+                <Button variant="text" onClick={onViewCourses}>View all courses<span aria-hidden="true">→</span></Button>
             </div>
             <CourseList
                 courses={ownCourses.slice(0, 3)} // this renders a curated course list, it limits the list to the first three courses and keeps the dashboard focused.

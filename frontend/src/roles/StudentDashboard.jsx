@@ -1,5 +1,6 @@
 // This is the student focused dasboard component for the frontend.
 import CourseList from "../components/CourseList.jsx";
+import Button from "../components/button/button.jsx";
 
 export const permissions = { canEnroll: true, conManangeCourses: false };
 
@@ -22,7 +23,7 @@ export default function StudentDashboard({
                     <h1>Good to see you. {user.username} <span aria-hidden="true">*</span></h1>
                     <p className="muted">A little progress each day adds up tp big results.</p>
                 </div>
-                <button className="button button-primary" onClick={onViewCourses}>Find a course <span aria-hidden="true">↗</span></button>
+                <Button onClick={onViewCourses}>Find a course <span aria-hidden="true">↗</span></Button>
             </div>
             // this block creates the three-card summery the is present at the top of the dashboard.  it uses the stats-grid container to arrange the cards in a compact layout.  starting with Courses in progress.
             <div className="stats-grid">
@@ -36,7 +37,7 @@ export default function StudentDashboard({
                     <p className="eyebrow">A place to begin</p>
                     <h2>Picked for your next step</h2>
                     </div>
-                    <button className="text-button" onCLick={onViewCourses}>View all courses<span aria-hidden="true">→</span></button>
+                    <Button variant="text" onClick={onViewCourses}>View all courses<span aria-hidden="true">→</span></Button>
                 </div>
             </div>
             <CourseList // this renders a curated course list, it limits the list to the first three courses and keeps the dashboard focused.
