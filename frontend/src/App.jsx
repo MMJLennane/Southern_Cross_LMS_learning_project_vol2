@@ -22,14 +22,12 @@ const roleModules = {
 };
 
 function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed from the API, role flags control which actions and views are shown.
-  const [courses, setCourses] = useState([]);
+     const [courses, setCourses] = useState([]);
   const [enrollments, setEnrollments] = useState([]);
-  const [users, setUsers] = useState([]);
   const [activeView, setActiveView] = useState("overview");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isCreatingCourse, setIsCreatingCourse] = useState(false);
-  const [isUpdatingUserRole, setIsUpdatingUserRole] = useState(false);
   const [editingCourse, setEditingCourse] = useState(null);
   const roleModule = roleModules[user.role];
   const RoleDashboard = roleModule?.component;
@@ -38,7 +36,6 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
     [enrollments],
   );
   const canManageCourses = roleModule?.permissions.canManageCourses ?? false;
-  const canManageUsers = roleModule?.permissions.canManageUsers ?? false;
   const canEnroll = roleModule?.permissions.canEnroll ?? false;
 
   const loadDashboard = useCallback(async () => { // Catalog data is public, while only students need their private enrollment list.
@@ -50,15 +47,12 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
       if (canEnroll) {
         setEnrollments(await api.listEnrollments(token));
       }
-      if (canManageUsers) {
-        setUsers(await api.listUsers(token));
-      }
     } catch (requestError) {
       setError(requestError.message);
     } finally {
       setIsLoading(false);
     }
-  }, [canEnroll, canManageUsers, token]);
+  }, [canEnroll, token]);
 
   useEffect(() => {
     loadDashboard();
@@ -72,19 +66,6 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
       setCourses(await api.listCourses());
     } catch (requestError) {
       setError(requestError.message);
-    }
-  }
-
-  async function changeUserRole(userId, role) {
-    setError("");
-    setIsUpdatingUserRole(true);
-    try {
-      await api.updateUserRole(userId, role, token);
-      setUsers(await api.listUsers(token));
-    } catch (requestError) {
-      setError(requestError.message);
-    } finally {
-      setIsUpdatingUserRole(false);
     }
   }
 
@@ -136,8 +117,8 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
     <div className="app-shell">
       <aside className="sidebar">
         <a className="brand" href="#home" aria-label="Southern Cross Learning home">
-          <span className="brand-mark">S</span>
-          <span>Southern Cross<span className="brand-dot">.</span></span>
+          <span className="brand-mark">N</span>
+          <span>northstar<span className="brand-dot">.</span></span>
         </a>
         <div className="side-label">LEARNING</div>
         <nav className="side-nav" aria-label="Main navigation">
@@ -158,8 +139,7 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
             </Button>
           )}
         </nav>
-        // app sidebar with positive reinforcement, profile information, and a logout button.  the profile information is shared by all dashboards, and the logout button is always present.
-        <div className="sidebar-bottom">  
+        <div className="sidebar-bottom">  // app sidebar with positive reinforcement, profile information, and a logout button.  the profile information is shared by all dashboards, and the logout button is always present.
           <div className="help-card">
             <span className="help-sparkle" aria-hidden="true">✳</span>
             <strong>Keep your momentum</strong>
@@ -175,8 +155,8 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
           </div>
         </div>
       </aside>
-          // Top bar and main course content area.
-      <main className="main-panel">
+
+      <main className="main-panel">// Top bar and main course content area.
         <header className="topbar">
           <div className="breadcrumb"><span>Workspace</span><span aria-hidden="true">/</span><strong>{activeView === "manage" ? "Manage courses" : activeView === "enrolled" ? "My learning" : activeView === "courses" ? "Explore courses" : "Overview"}</strong></div>
           <div className="topbar-right"><span className="today-label">A good day to learn something new.</span><div className="avatar avatar-small">{user.username.slice(0, 1).toUpperCase()}</div></div>
@@ -193,9 +173,6 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
               onEnroll={(id) => changeEnrollment(id, api.enroll)}
               onUnenroll={(id) => changeEnrollment(id, api.unenroll)}
               isLoading={isLoading}
-              users={users}
-              onUpdateUserRole={changeUserRole}
-              isUpdatingUserRole={isUpdatingUserRole}
             />
           )}
 
@@ -253,7 +230,7 @@ function Dashboard({ user, token, onLogout }) { // Dashboard state is refreshed 
 }
 export default function App() {// The root restores a saved access token, resolves its user, then selects auth or dashboard UI.
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(() => localStorage.getItem("southern-cross-learning-access-token"));
+  const [token, setToken] = useState(() => localStorage.getItem("northstar-access-token"));
   const [isRestoringSession, setIsRestoringSession] = useState(Boolean(token));
 
   useEffect(() => {
@@ -261,20 +238,20 @@ export default function App() {// The root restores a saved access token, resolv
     api.currentUser(token)
       .then(setUser)
       .catch(() => {
-        localStorage.removeItem("southern-cross-learning-access-token");
+        localStorage.removeItem("northstar-access-token");
         setToken(null);
       })
       .finally(() => setIsRestoringSession(false));
   }, [token]);
 
   function handleAuthenticated(authenticatedUser, accessToken) {// Persist only the access token; Dashboard receives it for later authenticated API requests.
-    localStorage.setItem("southern-cross-learning-access-token", accessToken);
+    localStorage.setItem("northstar-access-token", accessToken);
     setToken(accessToken);
     setUser(authenticatedUser);
   }
 
   function handleLogout() {// Clear both persisted and in-memory session state on sign-out.
-    localStorage.removeItem("southern-cross-learning-access-token");
+    localStorage.removeItem("northstar-access-token");
     setToken(null);
     setUser(null);
   }
